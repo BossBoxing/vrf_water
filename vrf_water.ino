@@ -16,6 +16,9 @@ int Alarm = 4;
 int relay = 3;
 OneWire oneWire(temperature);
 
+float DO;
+double NH3;
+
 DallasTemperature sensors(&oneWire);
 
 float Celsius = 0;
@@ -44,7 +47,7 @@ float t,h;
 
 unsigned long currentTime = millis();
 #define Timer (millis() - currentTime)
-int changeTime = 5000;  // เวลาที่ใช้ในการเปลี่ยนหน้าจอ 5 วินาที
+#define changeTime 5000  // เวลาที่ใช้ในการเปลี่ยนหน้าจอ 5 วินาที
 
 
 /****************************
@@ -154,6 +157,206 @@ void alarm() {
   digitalWrite(Alarm, HIGH);
 }
 
+/************************
+
+ - DO System
+
+*************************/
+void ComputeDO() {
+  if (Celsius >= 15 && Celsius <= 18) {
+    DO = 9.75; // mg./L
+  }
+  else if (Celsius >= 18 && Celsius <= 20) {
+    DO = 9.25; // mg./L
+  }
+  else if (Celsius >= 20 && Celsius <= 23) {
+    DO = 8.85; // mg./L
+  }
+  else if (Celsius >= 23 && Celsius <= 25) {
+    DO = 8.45; // mg./L
+  }
+  else if (Celsius >= 25 && Celsius <= 28) {
+    DO = 8.05; // mg./L
+  }
+  else if (Celsius >= 28 && Celsius <= 30) {
+    DO = 7.70; // mg./L
+  }
+  else if (Celsius >= 30 && Celsius <= 32) {
+    DO = 7.30; // mg./L
+  }
+}
+
+void Condition_DO() {
+  if (DO >= 8.00) {
+    offWaterPump();
+  }
+  else if (DO <= 4.00) {
+    onWaterPump();
+  }
+}
+
+void onWaterPump() {
+  // สั่งเปิดปั้มน้ำ
+}
+
+void offWaterPump() {
+ // สั่งปิดปั้มน้ำ
+}
+
+void DOShow() {
+  lcd.setCursor(4, 0);
+  lcd.print("DO Value");
+  lcd.setCursor(3, 1);
+  lcd.print("DO = ");
+  lcd.print(DO);
+}
+
+/************************
+
+ - NH3 System
+
+*************************/
+void ComputeNH3() {
+  if (Celsius >= 20 && Celsius <= 25) {
+    if (phValue >= 5 && phValue <= 6)
+    {
+      NH3 = 0.0;
+    }
+    else if (phValue >= 6 && phValue <= 7)
+    {
+      NH3 = 0.0002;
+    }
+    else if (phValue >= 7 && phValue <= 8)
+    {
+      NH3 = 0.002;
+    }
+    else if (phValue >= 8 && phValue <= 9)
+    {
+      NH3 = 0.0191;
+    }
+    else if (phValue >= 9 && phValue <= 9.5)
+    {
+      NH3 = 0.09;
+    }
+    else if (phValue >= 9.5)
+    {
+      NH3 = 0.112;
+    }
+  }
+  else if (Celsius >= 25 && Celsius <= 28) {
+    if (phValue >= 5 && phValue <= 6)
+    {
+      NH3 = 0.0;
+    }
+    else if (phValue >= 6 && phValue <= 7)
+    {
+      NH3 = 0.0003;
+    }
+    else if (phValue >= 7 && phValue <= 8)
+    {
+      NH3 = 0.0028;
+    }
+    else if (phValue >= 8 && phValue <= 9)
+    {
+      NH3 = 0.0269;
+    }
+    else if (phValue >= 9 && phValue <= 9.5)
+    {
+      NH3 = 0.124;
+    }
+    else if (phValue >= 9.5)
+    {
+      NH3 = 0.146;
+    }
+  }
+  else if (Celsius >= 28 && Celsius <= 32) {
+    if (phValue >= 5 && phValue <= 6)
+    {
+      NH3 = 0.0;
+    }
+    else if (phValue >= 6 && phValue <= 7)
+    {
+      NH3 = 0.0004;
+    }
+    else if (phValue >= 7 && phValue <= 8)
+    {
+      NH3 = 0.004;
+    }
+    else if (phValue >= 8 && phValue <= 9)
+    {
+      NH3 = 0.0124;
+    }
+    else if (phValue >= 9 && phValue <= 9.5)
+    {
+      NH3 = 0.181;
+    }
+    else if (phValue >= 9.5)
+    {
+      NH3 = 0.268;
+    }
+  }
+  else if (Celsius >= 32 && Celsius <= 34) {
+    if (phValue >= 5 && phValue <= 6)
+    {
+      NH3 = 0.0;
+    }
+    else if (phValue >= 6 && phValue <= 7)
+    {
+      NH3 = 0.0004;
+    }
+    else if (phValue >= 7 && phValue <= 8)
+    {
+      NH3 = 0.0124;
+    }
+    else if (phValue >= 8 && phValue <= 9)
+    {
+      NH3 = 0.0764;
+    }
+    else if (phValue >= 9 && phValue <= 9.5)
+    {
+      NH3 = 0.191;
+    }
+    else if (phValue >= 9.5)
+    {
+      NH3 = 0.336;
+    }
+  }
+  else if (Celsius >= 34) {
+    if (phValue >= 5 && phValue <= 6)
+    {
+      NH3 = 0.0;
+    }
+    else if (phValue >= 6 && phValue <= 7)
+    {
+      NH3 = 0.0005;
+    }
+    else if (phValue >= 7 && phValue <= 8)
+    {
+      NH3 = 0.0283;
+    }
+    else if (phValue >= 8 && phValue <= 9)
+    {
+      NH3 = 0.0885;
+    }
+    else if (phValue >= 9 && phValue <= 9.5)
+    {
+      NH3 = 0.269;
+    }
+    else if (phValue >= 9.5)
+    {
+      NH3 = 0.459;
+    }
+  }
+}
+
+void NH3Show() {
+  lcd.setCursor(4, 0);
+  lcd.print("NH3 Value");
+  lcd.setCursor(3, 1);
+  lcd.print("NH3 = ");
+  lcd.print(NH3);
+}
+
 /****************************
   - Ending Code Document -
 ****************************/
@@ -195,37 +398,50 @@ void loop() {
   pHCompute();
   dht22Compute();
 
+  ComputeDO(); // หาค่า DO
+  ComputeNH3(); // หาค่า NH3
+
   /*************
   - เริ่มต้นตรรกะ
   *************/
   Condition_pH(phValue); // ฟังชั่น ตรวจจับค่า pH
 
+  Condition_DO(); // ฟังชั่น ตรวจจับค่า DO
+
   /*************
   - แสดงผล
   *************/
-  if (Timer > (changeTime * 6 )) {
+  if (Timer > (changeTime * 6.5 )) {
     currentTime = millis();  // Reset การจับเวลา
     isClear=true;
   }
-  else if (Timer > (changeTime * 4 )) {
-    currentTime = millis();  // Reset การจับเวลา
+  else if (Timer > (changeTime * 5 )) {
+    // currentTime = millis();  // Reset การจับเวลา
     isClear=true;
   }
-  else if (Timer > (changeTime * 2)) {
+  else if (Timer > (changeTime * 3)) {
     isClear=true;
   }
   else if (Timer > (changeTime)) {
     isClear=true;
   }
 
-  if (Timer > (changeTime * 4 )) {
+  if (Timer > (changeTime * 6 )) {
+    if (isClear){
+      lcd.clear();
+      isClear=false;
+    }
+    // Show NH3;
+    NH3Show();
+    delay(500);
+  }
+  else if (Timer > (changeTime * 4 )) {
     if (isClear){
       lcd.clear();
       isClear=false;
     }
     // Show DO;
-    //DOShow();
-    // dht22Show();
+    DOShow();
     delay(500);
   }
   else if (Timer > (changeTime * 2 )) {
@@ -256,17 +472,3 @@ void loop() {
 /*****************************
   - Main End -
 *****************************/
-
-/*
-TempShow() Timer = 0
-
-lcdClear() Timer > 5000
-
-Humid() Timer > 5000
-
-lcdClear() Timer > (5000 * 2)
-
-dhtShow() Timer > (5000 * 2)
-
-lcdClear() Timer > (5000 * 4)
-*/
