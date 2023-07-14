@@ -203,18 +203,32 @@ void loop() {
   /*************
   - แสดงผล
   *************/
-  if (Timer > (changeTime * 1.9 )) {
+  if (Timer > (changeTime * 6 )) {
     currentTime = millis();  // Reset การจับเวลา
     isClear=true;
   }
-  else if (Timer > (changeTime * 0.9)) {
+  else if (Timer > (changeTime * 4 )) {
+    currentTime = millis();  // Reset การจับเวลา
+    isClear=true;
+  }
+  else if (Timer > (changeTime * 2)) {
     isClear=true;
   }
   else if (Timer > (changeTime)) {
     isClear=true;
   }
 
-  if (Timer > (changeTime * 2 )) {
+  if (Timer > (changeTime * 4 )) {
+    if (isClear){
+      lcd.clear();
+      isClear=false;
+    }
+    // Show DO;
+    //DOShow();
+    // dht22Show();
+    delay(500);
+  }
+  else if (Timer > (changeTime * 2 )) {
     if (isClear){
       lcd.clear();
       isClear=false;
@@ -242,3 +256,17 @@ void loop() {
 /*****************************
   - Main End -
 *****************************/
+
+/*
+TempShow() Timer = 0
+
+lcdClear() Timer > 5000
+
+Humid() Timer > 5000
+
+lcdClear() Timer > (5000 * 2)
+
+dhtShow() Timer > (5000 * 2)
+
+lcdClear() Timer > (5000 * 4)
+*/
