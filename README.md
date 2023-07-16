@@ -1,6 +1,13 @@
 # vrf_water
 Arduino Project, Verify Water, (pH, Temperature, Humidty)
 
+# Installation
+
+Library
+-  OneWire https://github.com/PaulStoffregen/OneWire
+-  DallasTemperature https://github.com/milesburton/Arduino-Temperature-Control-Library
+-  DHT22 https://github.com/nethoncho/Arduino-DHT22
+-  LiquidCrystal_I2C https://github.com/johnrickman/LiquidCrystal_I2C
 
 # Release / Download
 
